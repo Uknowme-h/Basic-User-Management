@@ -4,7 +4,7 @@ import FormInput from './FormInput';
 import CountrySelect from './CountrySelect';
 
 const Form = () => {
-  const { newUser, countries, setFieldValue, setProfilePicture, validateForm, addUser, fetchCountries } = useStore();
+  const { newUser, countries, setFieldValue, setProfilePicture, validateForm, addUser, fetchCountries, errors, isFormValid } = useStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -19,24 +19,19 @@ const Form = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setProfilePicture(file);
-    // Validate file type here
+    validateForm();
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    validateForm();
+    if (!isFormValid) return;
+
     setIsSubmitting(true);
 
     try {
-      addUser(newUser); // Add user to the store
-      setFieldValue('name', '');
-      setFieldValue('email', '');
-      setFieldValue('phoneNumber', '');
-      setFieldValue('dob', '');
-      setFieldValue('address.city', '');
-      setFieldValue('address.district', '');
-      setFieldValue('address.province', '');
-      setFieldValue('address.country', '');
-      setProfilePicture(null);
+      addUser(newUser);
+      resetForm();
     } catch (error) {
       console.error('Error adding user:', error);
     } finally {
@@ -44,9 +39,22 @@ const Form = () => {
     }
   };
 
+  const resetForm = () => {
+    setFieldValue('name', '');
+    setFieldValue('email', '');
+    setFieldValue('phoneNumber', '');
+    setFieldValue('dob', '');
+    setFieldValue('city', '');
+    setFieldValue('district', '');
+    setFieldValue('province', '');
+    setFieldValue('country', '');
+    setProfilePicture(null);
+    useStore.getState().resetForm();
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-6 max-w-lg mx-auto bg-white shadow-lg rounded-lg">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div className="relative">
           <FormInput
             label="Name"
@@ -54,8 +62,9 @@ const Form = () => {
             type="text"
             value={newUser.name}
             onChange={(value) => handleInputChange('name', value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className={`w-full px-3 py-2 border rounded-md shadow-sm ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
           />
+          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
         </div>
         <div className="relative">
           <FormInput
@@ -64,8 +73,9 @@ const Form = () => {
             type="email"
             value={newUser.email}
             onChange={(value) => handleInputChange('email', value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className={`w-full px-3 py-2 border rounded-md shadow-sm ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
           />
+          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
         </div>
         <div className="relative">
           <FormInput
@@ -74,8 +84,9 @@ const Form = () => {
             type="text"
             value={newUser.phoneNumber}
             onChange={(value) => handleInputChange('phoneNumber', value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className={`w-full px-3 py-2 border rounded-md shadow-sm ${errors.phoneNumber ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
           />
+          {errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
         </div>
         <div className="relative">
           <FormInput
@@ -84,7 +95,7 @@ const Form = () => {
             type="date"
             value={newUser.dob}
             onChange={(value) => handleInputChange('dob', value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border rounded-md shadow-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         <div className="relative">
@@ -92,9 +103,9 @@ const Form = () => {
             label="City"
             name="city"
             type="text"
-            value={newUser.address.city}
-            onChange={(value) => handleInputChange('address.city', value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            value={newUser.city}
+            onChange={(value) => handleInputChange('city', value)}
+            className="w-full px-3 py-2 border rounded-md shadow-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         <div className="relative">
@@ -102,9 +113,9 @@ const Form = () => {
             label="District"
             name="district"
             type="text"
-            value={newUser.address.district}
-            onChange={(value) => handleInputChange('address.district', value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            value={newUser.district}
+            onChange={(value) => handleInputChange('district', value)}
+            className="w-full px-3 py-2 border rounded-md shadow-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         <div className="relative">
@@ -112,18 +123,18 @@ const Form = () => {
             label="Province"
             name="province"
             type="text"
-            value={newUser.address.province}
-            onChange={(value) => handleInputChange('address.province', value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            value={newUser.province}
+            onChange={(value) => handleInputChange('province', value)}
+            className="w-full px-3 py-2 border rounded-md shadow-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         
         <div className="md:col-span-2 relative">
           <CountrySelect
             countries={countries}
-            value={newUser.address.country}
-            onChange={(value) => handleInputChange('address.country', value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            value={newUser.country}
+            onChange={(value) => handleInputChange('country', value)}
+            className="w-full px-3 py-2 border rounded-md shadow-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         <div className="md:col-span-2 relative">
@@ -134,14 +145,15 @@ const Form = () => {
             type="file"
             id="profilePicture"
             onChange={handleFileChange}
-            className="block w-full text-sm text-gray-500 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
+            className={`block w-full text-sm hover:cursor-pointer text-gray-500 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 ${errors.profilePicture ? 'border-red-500' : ''}`}
           />
+          {errors.profilePicture && <p className="text-red-500 text-sm">{errors.profilePicture}</p>}
         </div>
       </div>
       <button
         type="submit"
-        disabled={isSubmitting}
-        className="inline-flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4"
+        disabled={isSubmitting || !isFormValid}
+        className="inline-flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4 hover:cursor-pointer"
       >
         {isSubmitting ? 'Submitting...' : 'Submit'}
       </button>

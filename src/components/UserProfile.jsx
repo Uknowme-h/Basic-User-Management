@@ -7,7 +7,7 @@ const UserProfile = ({ user, onDelete, onEdit }) => (
     <td className="px-6 py-4 text-base font-medium text-gray-900">{user.phoneNumber}</td>
     <td className="px-6 py-4 text-base font-medium text-gray-900">{user.dob}</td>
     <td className="px-6 py-4 text-base font-medium text-gray-900">
-      {user.address.city}, {user.address.district}, {user.address.province}, {user.address.country}
+      {user.city}, {user.district}, {user.province}, {user.country}
     </td>
     <td className="px-6 py-4 text-base font-medium text-gray-900">
       {user.profilePicture ? (

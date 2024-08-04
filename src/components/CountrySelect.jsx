@@ -5,7 +5,7 @@ const CountrySelect = ({ countries, value, onChange }) => {
   const setCountry = useStore((state) => state.setFieldValue);
 
   const handleChange = (event) => {
-    setCountry('address.country', event.target.value);
+    setCountry('.country', event.target.value);
     onChange(event.target.value);
   };
 

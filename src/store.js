@@ -1,4 +1,5 @@
 import create from 'zustand';
+import endpoints from './endpoints';
 
 const useStore = create((set) => ({
   users: [],
@@ -8,18 +9,23 @@ const useStore = create((set) => ({
     email: '',
     phoneNumber: '',
     dob: '',
-    address: {
-      city: '',
-      district: '',
-      province: '',
-      country: '',
-    },
+    city: '',
+    district: '',
+    province: '',
+    country: '',
+    
     profilePicture: null,
   },
   errors: {},
   isFormValid: false,
   fetchCountries: async () => {
-    // Fetch countries from API and update state
+    try {
+      const response = await endpoints.getCountries();
+      const data = await response.json();
+      set({ countries: data });
+    } catch (error) {
+      console.error('Error fetching countries:', error);
+    }
   },
   addUser: (user) => set((state) => ({ users: [...state.users, user] })),
   updateUser: (index, updatedUser) =>
@@ -37,18 +43,45 @@ const useStore = create((set) => ({
       email: '',
       phoneNumber: '',
       dob: '',
-      address: {
-        city: '',
-        district: '',
-        province: '',
-        country: '',
-      },
+      city: '',
+      district: '',
+      province: '',
+      country: '',
       profilePicture: null,
     }
   }),
   validateForm: () => {
-    // Implement validation logic here
-    // Update errors and isFormValid accordingly
+    const { name, email, phoneNumber, profilePicture } = useStore.getState().newUser;
+    const errors = {};
+    let isFormValid = true;
+
+    if (!name) {
+      errors.name = 'Name is required';
+      isFormValid = false;
+    }
+    
+    if (!email) {
+      errors.email = 'Email is required';
+      isFormValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.email = 'Email must be in valid format';
+      isFormValid = false;
+    }
+
+    if (!phoneNumber) {
+      errors.phoneNumber = 'Phone number is required';
+      isFormValid = false;
+    } else if (!/^\d{7,}$/.test(phoneNumber)) {
+      errors.phoneNumber = 'Phone number must be at least 7 digits';
+      isFormValid = false;
+    }
+
+    if (profilePicture && !profilePicture.name.endsWith('.png')) {
+      errors.profilePicture = 'Profile picture must be a PNG file';
+      isFormValid = false;
+    }
+
+    set({ errors, isFormValid });
   },
 }));
 

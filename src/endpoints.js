@@ -7,8 +7,8 @@ const api = axios.create({
 class Endpoints {
   async getCountries() {
     const response = await api.get('all');
-    console.log(response.data)
-    return response.data;
+    console.log(response.data.name.common)
+    return response.data.name;
   }
 }
 
