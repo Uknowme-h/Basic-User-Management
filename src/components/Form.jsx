@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useStore from '../store';
 import FormInput from './FormInput';
 import CountrySelect from './CountrySelect';
+import { toast } from 'react-toastify';
 
 const Form = () => {
   const { newUser, countries, setFieldValue, setProfilePicture, validateForm, addUser, fetchCountries, errors, isFormValid } = useStore();
@@ -32,6 +33,7 @@ const Form = () => {
     try {
       addUser(newUser);
       resetForm();
+      toast.success('User added successfully!');
     } catch (error) {
       console.error('Error adding user:', error);
     } finally {
@@ -53,9 +55,17 @@ const Form = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-6 max-w-lg mx-auto bg-white shadow-lg rounded-lg">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-        <div className="relative">
+    <div className="flex max-w-4xl mx-auto bg-white shadow-lg rounded-lg">
+      <div className="flex-none w-1/2 bg-gray-100">
+        <img 
+          src='./login.png'
+          alt='Login'
+          className="object-cover w-full h-full"
+        />
+      </div>
+      <form onSubmit={handleSubmit} className="flex-1 p-6">
+        <h1 className="text-xl text-center mb-6">Create User</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormInput
             label="Name"
             name="name"
@@ -65,8 +75,6 @@ const Form = () => {
             className={`w-full px-3 py-2 border rounded-md shadow-sm ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
           />
           {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
-        </div>
-        <div className="relative">
           <FormInput
             label="Email"
             name="email"
@@ -76,8 +84,6 @@ const Form = () => {
             className={`w-full px-3 py-2 border rounded-md shadow-sm ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
           />
           {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-        </div>
-        <div className="relative">
           <FormInput
             label="Phone Number"
             name="phoneNumber"
@@ -87,8 +93,6 @@ const Form = () => {
             className={`w-full px-3 py-2 border rounded-md shadow-sm ${errors.phoneNumber ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
           />
           {errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
-        </div>
-        <div className="relative">
           <FormInput
             label="Date of Birth"
             name="dob"
@@ -97,8 +101,6 @@ const Form = () => {
             onChange={(value) => handleInputChange('dob', value)}
             className="w-full px-3 py-2 border rounded-md shadow-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
-        </div>
-        <div className="relative">
           <FormInput
             label="City"
             name="city"
@@ -107,8 +109,6 @@ const Form = () => {
             onChange={(value) => handleInputChange('city', value)}
             className="w-full px-3 py-2 border rounded-md shadow-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
-        </div>
-        <div className="relative">
           <FormInput
             label="District"
             name="district"
@@ -117,8 +117,6 @@ const Form = () => {
             onChange={(value) => handleInputChange('district', value)}
             className="w-full px-3 py-2 border rounded-md shadow-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
-        </div>
-        <div className="relative">
           <FormInput
             label="Province"
             name="province"
@@ -127,17 +125,12 @@ const Form = () => {
             onChange={(value) => handleInputChange('province', value)}
             className="w-full px-3 py-2 border rounded-md shadow-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
-        </div>
-        
-        <div className="md:col-span-2 relative">
           <CountrySelect
             countries={countries}
             value={newUser.country}
             onChange={(value) => handleInputChange('country', value)}
             className="w-full px-3 py-2 border rounded-md shadow-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
-        </div>
-        <div className="md:col-span-2 relative">
           <label htmlFor="profilePicture" className="block text-sm font-medium text-gray-700 mb-1">
             Profile Picture
           </label>
@@ -149,15 +142,15 @@ const Form = () => {
           />
           {errors.profilePicture && <p className="text-red-500 text-sm">{errors.profilePicture}</p>}
         </div>
-      </div>
-      <button
-        type="submit"
-        disabled={isSubmitting || !isFormValid}
-        className="inline-flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4 hover:cursor-pointer"
-      >
-        {isSubmitting ? 'Submitting...' : 'Submit'}
-      </button>
-    </form>
+        <button
+          type="submit"
+          disabled={isSubmitting || !isFormValid}
+          className="inline-flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4"
+        >
+          {isSubmitting ? 'Submitting...' : 'Submit'}
+        </button>
+      </form>
+    </div>
   );
 };
 

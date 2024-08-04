@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import useStore from '../store';
 import UserProfile from './UserProfile';
+import FormInput from './FormInput';
+import CountrySelect from './CountrySelect';
 
 const UserTable = () => {
-  const { users, deleteUser, updateUser } = useStore();
+  const { users, deleteUser, updateUser, countries } = useStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(5);
   const [editingUserIndex, setEditingUserIndex] = useState(null);
-  const [editForm, setEditForm] = useState({ name: '', email: '', phoneNumber: '', dob: '', city: '', district: '', province: '', country: ''  });
+  const [editForm, setEditForm] = useState({ name: '', email: '', phoneNumber: '', dob: '', city: '', district: '', province: '', country: '' });
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
@@ -35,7 +37,7 @@ const UserTable = () => {
   const handleSubmitEdit = () => {
     updateUser(editingUserIndex, editForm);
     setEditingUserIndex(null);
-    setEditForm({ name: '', email: '', phoneNumber: '', dob: '',  city: '', district: '', province: '', country: ''  });
+    setEditForm({ name: '', email: '', phoneNumber: '', dob: '', city: '', district: '', province: '', country: '' });
   };
 
   const handleDelete = (index) => {
@@ -49,78 +51,60 @@ const UserTable = () => {
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-xl font-semibold mb-4">Edit User</h2>
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Name</label>
-                <input
-                  type="text"
-                  value={editForm.name}
-                  onChange={(e) => handleEditChange('name', e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Email</label>
-                <input
-                  type="email"
-                  value={editForm.email}
-                  onChange={(e) => handleEditChange('email', e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Phone Number</label>
-                <input
-                  type="text"
-                  value={editForm.phoneNumber}
-                  onChange={(e) => handleEditChange('phoneNumber', e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
-                <input
-                  type="date"
-                  value={editForm.dob}
-                  onChange={(e) => handleEditChange('dob', e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">City</label>
-                <input
-                  type="text"
-                  value={editForm.city}
-                  onChange={(e) => handleEditChange('city', e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">District</label>
-                <input
-                  type="text"
-                  value={editForm.district}
-                  onChange={(e) => handleEditChange('district', e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Province</label>
-                <input
-                  type="text"
-                  value={editForm.province}
-                  onChange={(e) => handleEditChange('province', e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Country</label>
-                <input
-                  type="text"
-                  value={editForm.country}
-                  onChange={(e) => handleEditChange('country', e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                />
-              </div>
+              <FormInput
+                label="Name"
+                name="name"
+                type="text"
+                value={editForm.name}
+                onChange={(value) => handleEditChange('name', value)}
+              />
+              <FormInput
+                label="Email"
+                name="email"
+                type="email"
+                value={editForm.email}
+                onChange={(value) => handleEditChange('email', value)}
+              />
+              <FormInput
+                label="Phone Number"
+                name="phoneNumber"
+                type="text"
+                value={editForm.phoneNumber}
+                onChange={(value) => handleEditChange('phoneNumber', value)}
+              />
+              <FormInput
+                label="Date of Birth"
+                name="dob"
+                type="date"
+                value={editForm.dob}
+                onChange={(value) => handleEditChange('dob', value)}
+              />
+              <FormInput
+                label="City"
+                name="city"
+                type="text"
+                value={editForm.city}
+                onChange={(value) => handleEditChange('city', value)}
+              />
+              <FormInput
+                label="District"
+                name="district"
+                type="text"
+                value={editForm.district}
+                onChange={(value) => handleEditChange('district', value)}
+              />
+              <FormInput
+                label="Province"
+                name="province"
+                type="text"
+                value={editForm.province}
+                onChange={(value) => handleEditChange('province', value)}
+              />
+              <CountrySelect
+                countries={countries}
+                value={editForm.country}
+                onChange={(value) => handleEditChange('country', value)}
+              />
               <div className="flex justify-end space-x-2">
                 <button
                   type="button"
@@ -164,13 +148,13 @@ const UserTable = () => {
           ))}
         </tbody>
       </table>
-      <div className="mt-4">
-        <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+      <div className="mb-4 flex items-center justify-center">
+        <nav className=" z-0 inline-flex rounded-md shadow-sm -space-x-px">
           {pageNumbers.map((number) => (
             <button
               key={number}
               onClick={() => paginate(number)}
-              className={`relative flex items-center justify-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-black hover:bg-gray-50 ${number === currentPage ? 'bg-indigo-500 text-white' : ''}`}
+              className={` flex items-center justify-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-black hover:bg-gray-50 ${number === currentPage ? 'bg-indigo-500 text-white' : ''}`}
             >
               {number}
             </button>
