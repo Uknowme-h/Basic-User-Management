@@ -39,7 +39,7 @@ const Form = () => {
     } else {
       console.error("Invalid file selected.");
     }
-  }; 
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();

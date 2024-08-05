@@ -22,7 +22,7 @@ const UserTable = () => {
   const userdata = JSON.parse(localStorage.getItem("users"));
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = userdata.slice(indexOfFirstUser, indexOfLastUser);
+  const currentUsers = userdata?.slice(indexOfFirstUser, indexOfLastUser);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -187,7 +187,9 @@ const UserTable = () => {
               key={number}
               onClick={() => paginate(number)}
               className={`relative flex items-center justify-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-black hover:bg-gray-50 ${
-                number === currentPage ? "bg-indigo-500 text-black" : "text-black"
+                number === currentPage
+                  ? "bg-indigo-500 text-black"
+                  : "text-black"
               }`}
             >
               {number}

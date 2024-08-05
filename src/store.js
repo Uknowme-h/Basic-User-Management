@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import endpoints from "./endpoints";
 
 const useStore = create((set) => ({
@@ -49,8 +49,6 @@ const useStore = create((set) => ({
   },
   setFieldValue: (field, value) =>
     set((state) => ({ newUser: { ...state.newUser, [field]: value } })),
-  setFieldValue: (field, value) =>
-    set((state) => ({ newUser: { ...state.newUser, [field]: value } })),
   setProfilePicture: (file) =>
     set((state) => ({ newUser: { ...state.newUser, profilePicture: file } })),
   resetForm: () =>
@@ -64,7 +62,7 @@ const useStore = create((set) => ({
         district: "",
         province: "",
         country: "",
-        profilePicture: null,
+
       },
     }),
   validateForm: () => {
