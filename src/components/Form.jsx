@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import useStore from "../store";
 import FormInput from "./FormInput";
 import CountrySelect from "./CountrySelect";
-import { toast } from "react-toastify";
 
 const Form = () => {
   const {
