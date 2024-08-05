@@ -187,7 +187,7 @@ const UserTable = () => {
               key={number}
               onClick={() => paginate(number)}
               className={`relative flex items-center justify-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-black hover:bg-gray-50 ${
-                number === currentPage ? "bg-indigo-500 text-white" : ""
+                number === currentPage ? "bg-indigo-500 text-black" : "text-black"
               }`}
             >
               {number}

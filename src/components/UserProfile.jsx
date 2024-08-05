@@ -27,6 +27,7 @@ const UserProfile = ({ user, onDelete, onEdit }) => (
       ) : (
         "No picture"
       )}
+      
     </td>
     <td className="px-6 py-4 text-sm font-medium">
       <button
