@@ -1,15 +1,16 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'https://restcountries.com/v3.1/',
+  baseURL: "https://restcountries.com/v3.1/",
 });
 
 class Endpoints {
   async getCountries() {
-    const response = await api.get('all');
-    console.log(response.data[0].name.common)
-    return response.data.name;
+    const response = await api.get("all");
+    const countryNames = response?.data?.map((country) => country.name.common);
+    return countryNames;
   }
 }
 
-export default new Endpoints();
+const endpoints = new Endpoints();
+export default endpoints;
