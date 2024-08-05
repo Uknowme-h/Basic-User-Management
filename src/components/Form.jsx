@@ -51,7 +51,6 @@ const Form = () => {
     try {
       addUser(newUser);
       resetForm();
-      toast.success("User added successfully!");
     } catch (error) {
       console.error("Error adding user:", error);
     } finally {
