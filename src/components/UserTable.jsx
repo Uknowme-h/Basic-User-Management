@@ -170,7 +170,7 @@ const UserTable = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {currentUsers.map((user, index) => (
+          {currentUsers?.map((user, index) => (
             <UserProfile
               key={index}
               user={user}
