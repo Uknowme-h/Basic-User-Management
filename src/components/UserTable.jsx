@@ -27,7 +27,7 @@ const UserTable = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(userdata.length / usersPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(userdata?.length / usersPerPage); i++) {
     pageNumbers.push(i);
   }
 
